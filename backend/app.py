@@ -1,16 +1,17 @@
-from fastapi import FastAPI, Header, HTTPException
-from scanner_logic import run_security_scan
+from librouteros import connect
 
-app = FastAPI()
-
-# مفتاح حماية للـ API الخاص بك
-API_KEY = "your_secure_key"
-
-@app.post("/scan")
-async def trigger_scan(ip: str, user: str, password: str, api_key: str = Header(...)):
-    if api_key != API_KEY:
-        raise HTTPException(status_code=403, detail="غير مصرح به")
-    
-    # تنفيذ الفحص
-    results = run_security_scan(ip, user, password)
-    return {"status": "success", "data": results}
+def run_security_scan(ip, user, password):
+    try:
+        api = connect(host=ip, username=user, password=password)
+        vulnerabilities = []
+        
+        # فحص الخدمات
+        services = api(cmd='/ip/service/print')
+        for s in services:
+            if s['name'] in ['telnet', 'ftp', 'www'] and s['disabled'] == 'false':
+                vulnerabilities.append(f"خطر: الخدمة {s['name']} مفتوحة")
+        
+        api.close()
+        return vulnerabilities
+    except Exception as e:
+        return [f"خطأ اتصال: {str(e)}"]
