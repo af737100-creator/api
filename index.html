@@ -1,20 +1,44 @@
 <!DOCTYPE html>
 <html dir="rtl" lang="ar">
+<head>
+    <meta charset="UTF-8">
+    <title>ماسح الشبكة الاحترافي</title>
+</head>
 <body>
-    <h2>لوحة تحكم الفحص المتقدم</h2>
-    <input type="text" id="ipInput" placeholder="أدخل الـ IP">
+    <h2>لوحة تحكم الفحص المتقدم (30 أداة)</h2>
+    <input type="text" id="ipInput" placeholder="أدخل الـ IP هنا">
     
     <select id="toolSelect">
-        <option value="1">1. فحص المنافذ الشائعة</option>
-        <option value="2">2. كشف خدمات الويب (HTTP)</option>
-        <option value="3">3. فحص بروتوكول FTP</option>
-        <option value="4">4. فحص بروتوكول Telnet</option>
-        <option value="5">5. فحص منفذ Winbox</option>
+        <option value="1">1. الفحص الأساسي (MikroTik)</option>
+        <option value="2">2. خدمات الويب (HTTP)</option>
+        <option value="3">3. فحص FTP</option>
+        <option value="4">4. فحص Telnet</option>
+        <option value="5">5. فحص Winbox</option>
         <option value="6">6. فحص خدمات API</option>
-        <option value="7">7. فحص SSH (الأمان)</option>
-        <option value="8">8. اختبار زمن الاستجابة (Ping)</option>
-        <option value="9">9. فحص المنافذ العشوائية العالية</option>
-        <option value="10">10. فحص كامل وشامل</option>
+        <option value="7">7. فحص SSH</option>
+        <option value="8">8. فحص المنفذ 80</option>
+        <option value="9">9. فحص المنافذ العالية</option>
+        <option value="10">10. فحص شامل</option>
+        <option value="11">11. فحص DNS</option>
+        <option value="12">12. فحص POP3</option>
+        <option value="13">13. فحص IMAP</option>
+        <option value="14">14. فحص SNMP</option>
+        <option value="15">15. فحص SMB/CIFS</option>
+        <option value="16">16. فحص MySQL</option>
+        <option value="17">17. فحص RDP</option>
+        <option value="18">18. فحص PostgreSQL</option>
+        <option value="19">19. فحص Redis</option>
+        <option value="20">20. فحص منفذ 8081</option>
+        <option value="21">21. فحص OpenVPN</option>
+        <option value="22">22. فحص SIP</option>
+        <option value="23">23. فحص VNC</option>
+        <option value="24">24. فحص منفذ 8000</option>
+        <option value="25">25. فحص HTTPS متقدم</option>
+        <option value="26">26. فحص منفذ 9000</option>
+        <option value="27">27. فحص Elasticsearch</option>
+        <option value="28">28. فحص MongoDB</option>
+        <option value="29">29. فحص منفذ 10000</option>
+        <option value="30">30. فحص منافذ الألعاب والمتقدمة</option>
     </select>
     
     <button onclick="startScan()">بدء الفحص</button>
@@ -25,9 +49,11 @@
             const ip = document.getElementById('ipInput').value;
             const tool = document.getElementById('toolSelect').value;
             const resDiv = document.getElementById('results');
-            resDiv.innerHTML = "جاري تنفيذ الأداة رقم " + tool + "...";
+            resDiv.innerHTML = "جاري الفحص...";
+            
             const response = await fetch(`/scan?ip=${ip}&tool_id=${tool}`);
             const data = await response.json();
+            
             resDiv.innerHTML = "<pre>" + JSON.stringify(data.results, null, 2) + "</pre>";
         }
     </script>
