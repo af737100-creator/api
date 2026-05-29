@@ -1,6 +1,8 @@
 {
     "dangerous_services": ["telnet", "ftp", "www", "winbox", "api"],
-    "check_admin_password": true,
-    "check_open_ports": true,
-    "version_warning": "6.49"
+    "critical_users": ["admin"],
+    "check_settings": {
+        "check_services": true,
+        "check_admin_pass": true
+    }
 }
