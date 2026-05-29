@@ -1,26 +1,33 @@
 <!DOCTYPE html>
 <html dir="rtl" lang="ar">
-<head>
-    <meta charset="UTF-8">
-    <title>ماسح الشبكة المباشر</title>
-</head>
 <body>
-    <h2>أدخل الـ IP للبدء:</h2>
-    <input type="text" id="ipInput" placeholder="مثال: 192.168.1.1">
-    <button onclick="startScan()">فحص الآن</button>
+    <h2>لوحة تحكم الفحص المتقدم</h2>
+    <input type="text" id="ipInput" placeholder="أدخل الـ IP">
     
+    <select id="toolSelect">
+        <option value="1">1. فحص المنافذ الشائعة</option>
+        <option value="2">2. كشف خدمات الويب (HTTP)</option>
+        <option value="3">3. فحص بروتوكول FTP</option>
+        <option value="4">4. فحص بروتوكول Telnet</option>
+        <option value="5">5. فحص منفذ Winbox</option>
+        <option value="6">6. فحص خدمات API</option>
+        <option value="7">7. فحص SSH (الأمان)</option>
+        <option value="8">8. اختبار زمن الاستجابة (Ping)</option>
+        <option value="9">9. فحص المنافذ العشوائية العالية</option>
+        <option value="10">10. فحص كامل وشامل</option>
+    </select>
+    
+    <button onclick="startScan()">بدء الفحص</button>
     <div id="results"></div>
 
     <script>
         async function startScan() {
             const ip = document.getElementById('ipInput').value;
+            const tool = document.getElementById('toolSelect').value;
             const resDiv = document.getElementById('results');
-            resDiv.innerHTML = "جاري الفحص...";
-            
-            // استبدل الرابط أدناه برابط السيرفر الخاص بك على Render
-            const response = await fetch(`https://api-9fei.onrender.com/scan?ip=${ip}`);
+            resDiv.innerHTML = "جاري تنفيذ الأداة رقم " + tool + "...";
+            const response = await fetch(`/scan?ip=${ip}&tool_id=${tool}`);
             const data = await response.json();
-            
             resDiv.innerHTML = "<pre>" + JSON.stringify(data.results, null, 2) + "</pre>";
         }
     </script>
