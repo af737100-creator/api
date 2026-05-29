@@ -1,17 +1,9 @@
-from librouteros import connect
+from fastapi import FastAPI
+from scanner_logic import run_security_scan
 
-def run_security_scan(ip, user, password):
-    try:
-        api = connect(host=ip, username=user, password=password)
-        vulnerabilities = []
-        
-        # فحص الخدمات
-        services = api(cmd='/ip/service/print')
-        for s in services:
-            if s['name'] in ['telnet', 'ftp', 'www'] and s['disabled'] == 'false':
-                vulnerabilities.append(f"خطر: الخدمة {s['name']} مفتوحة")
-        
-        api.close()
-        return vulnerabilities
-    except Exception as e:
-        return [f"خطأ اتصال: {str(e)}"]
+app = FastAPI()
+
+@app.get("/scan")
+def scan(ip: str, user: str, password: str):
+    # يقوم باستدعاء المنطق وإرجاع النتيجة مباشرة دون حفظها في قاعدة بيانات
+    return {"results": run_security_scan(ip, user, password)}
