@@ -1,0 +1,28 @@
+<!DOCTYPE html>
+<html dir="rtl" lang="ar">
+<head>
+    <meta charset="UTF-8">
+    <title>ماسح الشبكة المباشر</title>
+</head>
+<body>
+    <h2>أدخل الـ IP للبدء:</h2>
+    <input type="text" id="ipInput" placeholder="مثال: 192.168.1.1">
+    <button onclick="startScan()">فحص الآن</button>
+    
+    <div id="results"></div>
+
+    <script>
+        async function startScan() {
+            const ip = document.getElementById('ipInput').value;
+            const resDiv = document.getElementById('results');
+            resDiv.innerHTML = "جاري الفحص...";
+            
+            // استبدل الرابط أدناه برابط السيرفر الخاص بك على Render
+            const response = await fetch(`https://api-9fei.onrender.com/scan?ip=${ip}`);
+            const data = await response.json();
+            
+            resDiv.innerHTML = "<pre>" + JSON.stringify(data.results, null, 2) + "</pre>";
+        }
+    </script>
+</body>
+</html>
