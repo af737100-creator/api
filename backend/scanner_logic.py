@@ -9,14 +9,9 @@ def run_security_scan(ip, user, password):
         services = api(cmd='/ip/service/print')
         for s in services:
             if s['name'] in ['telnet', 'ftp', 'www'] and s['disabled'] == 'false':
-                vulnerabilities.append(f"خطر: {s['name']} مفتوح")
+                vulnerabilities.append(f"خطر: الخدمة {s['name']} مفتوحة")
         
-        # فحص المستخدمين
-        users = api(cmd='/user/print')
-        for u in users:
-            if u['name'] == 'admin' and u['group'] == 'full':
-                vulnerabilities.append("تحذير: مستخدم admin بخصائص كاملة")
-                
+        api.close()
         return vulnerabilities
     except Exception as e:
-        return [f"خطأ في الاتصال: {str(e)}"]
+        return [f"خطأ اتصال: {str(e)}"]
