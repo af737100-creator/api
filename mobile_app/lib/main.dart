@@ -26,9 +26,10 @@ class ScanDashboard extends StatefulWidget {
 
 class _ScanDashboardState extends State<ScanDashboard> {
   final _ipController = TextEditingController(text: '192.168.88.1');
+  final _apiController = TextEditingController(text: 'https://your-secured-cloud-api.onrender.com');
   bool _isLoading = false;
   Map<String, dynamic>? _results;
-  String _statusMessage = 'أدخل عنوان الـ IP والاتصال للفحص';
+  String _statusMessage = 'أدخل عنوان الـ IP ورابط الـ API لبدء الفحص';
 
   Future<void> triggerVulnerabilityScan() async {
     setState(() {
@@ -37,7 +38,8 @@ class _ScanDashboardState extends State<ScanDashboard> {
       _results = null;
     });
 
-    final apiUrl = Uri.parse('https://your-api.onrender.com/scan');
+    final apiBaseUrl = _apiController.text.trim();
+    final apiUrl = Uri.parse('$apiBaseUrl/scan');
     
     try {
       final response = await http.post(
@@ -75,7 +77,8 @@ class _ScanDashboardState extends State<ScanDashboard> {
   }
 
   Future<void> fetchScanResults(String scanId) async {
-    final resultsUrl = Uri.parse('https://your-api.onrender.com/results/$scanId');
+    final apiBaseUrl = _apiController.text.trim();
+    final resultsUrl = Uri.parse('$apiBaseUrl/results/$scanId');
     try {
       final response = await http.get(resultsUrl);
       if (response.statusCode == 200) {
@@ -98,8 +101,20 @@ class _ScanDashboardState extends State<ScanDashboard> {
         child: Column(
           children: [
             TextField(
+              controller: _apiController,
+              decoration: const InputDecoration(
+                labelText: 'رابط خادم الـ API (FastAPI Backend URL)',
+                hintText: 'https://your-secured-cloud-api.onrender.com',
+                prefixIcon: Icon(Icons.link),
+              ),
+            ),
+            const SizedBox(height: 12),
+            TextField(
               controller: _ipController,
-              decoration: const InputDecoration(labelText: 'عنوان IP لجهاز MikroTik'),
+              decoration: const InputDecoration(
+                labelText: 'عنوان IP لجهاز MikroTik',
+                prefixIcon: Icon(Icons.router),
+              ),
             ),
             const SizedBox(height: 16),
             ElevatedButton(
