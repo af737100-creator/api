@@ -28,6 +28,24 @@ jobs:
           channel: 'stable'
           cache: true
 
+      - name: Initialize Complete Flutter Project On-the-fly
+        run: |
+          # Create a temp dir to back up our custom source files
+          mkdir -p temp_flutter_src
+          cp -f mobile_app/lib/main.dart temp_flutter_src/main.dart || true
+          cp -f mobile_app/pubspec.yaml temp_flutter_src/pubspec.yaml || true
+          
+          # Clean and re-create a standard Flutter app wrapper with the matching project name
+          rm -rf mobile_app
+          flutter create --org com.mikrotik.scanner --project-name microtik_scanner mobile_app
+          
+          # Inject our actual custom source files back into the generated project
+          cp -f temp_flutter_src/main.dart mobile_app/lib/main.dart || true
+          cp -f temp_flutter_src/pubspec.yaml mobile_app/pubspec.yaml || true
+          
+          # Clean up temp
+          rm -rf temp_flutter_src
+
       - name: Download App Dependencies
         run: |
           cd mobile_app
@@ -36,7 +54,7 @@ jobs:
       - name: Compile Release APK (Universal Build)
         run: |
           cd mobile_app
-          flutter build apk --release --target-platform android-arm,android-arm64,android-x64
+          flutter build apk --release
 
       - name: Upload Release APK Product
         uses: actions/upload-artifact@v4
