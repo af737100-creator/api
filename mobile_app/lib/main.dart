@@ -543,7 +543,7 @@ class _ScanDashboardState extends State<ScanDashboard> {
                                 Expanded(
                                   child: Text(
                                     vuln['title'],
-                                    style: const TextStyle(fontWeight: FontWeight.black, fontSize: 13, color: Colors.white),
+                                    style: const TextStyle(fontWeight: FontWeight.bold, fontSize: 13, color: Colors.white),
                                   ),
                                 ),
                                 Container(
